@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import ErroBase from "../errors/ErroBase.js";
 import RequisicaoIncorreta from "../errors/RequisicaoIncorreta.js";
+import ErroValidacao from "../errors/ErroValidacao.js";
 
 function manipuladorDeErros(erro, req, res, next){
     if(erro instanceof mongoose.Error.CastError){
@@ -8,9 +9,7 @@ function manipuladorDeErros(erro, req, res, next){
     } 
     
     else if(erro instanceof mongoose.Error.ValidationError){
-        const mensagemErro = Object.values(erro.errors).map(erro => erro.message).join("; ");
-
-        res.status(400).json({message: "Dados enviados de forma incorreta. Erros: " + mensagemErro});
+        new ErroValidacao(erro).enviarResposta(res);
     }
     
     else{
