@@ -17,8 +17,10 @@ conexao.once("open", () => {
 const app = express();
 routes(app);
 
+app.use(manipuladorDeErros);
+
 app.use(manipulador404);
 
-app.use(manipuladorDeErros);
+
 
 export default app;
