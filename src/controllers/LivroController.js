@@ -26,7 +26,7 @@ class LivroController{
     static async cadastrarLivro(req, res, next){
         try{
             const autorEncontrado = await autor.findById(req.body.autor);
-            const livroCompleto = {...req.body, autor: {...autorEncontrado._doc}};
+            const livroCompleto = {...req.body, autor: {...autorEncontrado}};
 
             const novoLivro = await livro.create(livroCompleto);
             res.status(201).json({message: "Criado com sucesso.", livro: novoLivro});
