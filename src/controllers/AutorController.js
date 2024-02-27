@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { autor } from "../models/Autor.js";
+import NaoEncontrado from "../errors/NaoEncontrado.js";
 
 class AutorController{
     static async listarAutores(req, res, next){
@@ -23,7 +24,7 @@ class AutorController{
             }
             
         } catch(erro){
-            next(erro);
+            next(new NaoEncontrado("ID do autor nao localizado."));
         }
         
     }
