@@ -1,53 +1,59 @@
+import mongoose from "mongoose";
 import { autor } from "../models/Autor.js";
 
 class AutorController{
-    static async listarAutores(req, res){
+    static async listarAutores(req, res, next){
         try{
             let autores = await autor.find({});
 
             res.status(200).json(autores);
         } catch(erro){
-            res.status(500).json({message: `${erro.message}`});
+            next(erro);
         }
     }
 
-    static async resgatarAutor(req, res){
+    static async resgatarAutor(req, res, next){
         try{
             let autorGet = await autor.findById(req.params.id);
 
-            res.status(200).json(autorGet);
+            if(autorGet === null){
+                res.status(400).json({message: "Id do autor nao encontrado."});
+            } else{
+                res.status(200).json(autorGet);
+            }
+            
         } catch(erro){
-            res.status(500).json({message: `${erro.message}`});
+            next(erro);
         }
         
     }
 
-    static async cadastrarAutor(req, res){
+    static async cadastrarAutor(req, res, next){
         try{
             const novoAutor = await autor.create(req.body);
             res.status(201).json({message: "Criado com sucesso.", autor: novoAutor});
         } catch(erro){
-            res.status(500).json({message: `${erro.message}`});
+            next(erro);
         }
     }
 
-    static async atualizarAutor(req, res){
+    static async atualizarAutor(req, res, next){
         try{
             await autor.findByIdAndUpdate(req.params.id, req.body);
     
             res.status(200).json({message: "Autor atualizado."});
         } catch(erro){
-            res.status(500).json({message: `${erro.message}`});  
+            next(erro);
         }
     }
 
-    static async deletarAutor(req, res){
+    static async deletarAutor(req, res, next){
         try{
             await autor.findByIdAndDelete(req.params.id);
     
             res.status(204);
         } catch(erro){
-            res.status(500).json({message: `${erro.message}`});  
+            next(erro);
         }
     }
 }
