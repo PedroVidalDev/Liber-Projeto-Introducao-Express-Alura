@@ -11,7 +11,13 @@ const autorSchema = new mongoose.Schema({
     },
 
     nacionalidade: {
-        type: String
+        type: String,
+        validate: {
+            validator: (valor) => {
+                return valor == "Brasil";
+            },
+            message: "A nacionalidade do autor deve ser brasileira."
+        }
     }
 }, {versionKey: false})
 
