@@ -1,4 +1,5 @@
-import autores from "./Autor.js";
-import livros from "./Livro.js";
+import "./validadorGlobal.js";
+import {autor} from "./Autor.js";
+import livro from "./Livro.js";
 
-export default {autores, livros}
+export {autor, livro}
