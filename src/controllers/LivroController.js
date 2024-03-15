@@ -55,11 +55,31 @@ class LivroController{
         }
     }
 
-    static async resgatarLivroPorEditora(req, res, next){
+    static async resgatarLivroPorFiltro(req, res, next){
         try{
-            const livros = find({ editora: req.query.editora });
+            const {editora, titulo, nomeAutor} = req.query;
+
+            let busca = {};
+
+            if(editora) busca.editora = editora;
+            if(titulo) busca.titulo = {$regex: titulo, $options: "i"};
+            if(nomeAutor){
+                const autorCompleto = await autor.findOne({ nome: nomeAutor });
+
+                if(autorCompleto !== null){
+                    busca.autor = autorCompleto._id;
+                } else{
+                    busca = null;
+                }
+            }
+
+            if(busca !== null){
+                const livros = await livro.find(busca).populate("autor");
             
-            res.status(200).json(livros);
+                res.status(200).json(livros);
+            } else{
+                res.status(200).send([]);
+            }
         } catch(erro){
             next(erro);
         }
