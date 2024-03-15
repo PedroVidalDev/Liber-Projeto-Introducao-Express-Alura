@@ -5,9 +5,12 @@ import NaoEncontrado from "../errors/NaoEncontrado.js";
 class AutorController{
     static async listarAutores(req, res, next){
         try{
-            let autores = await autor.find({});
+            let autores = autor.find({});
 
-            res.status(200).json(autores);
+            req.resultado = autores;
+
+            next();
+        
         } catch(erro){
             next(erro);
         }

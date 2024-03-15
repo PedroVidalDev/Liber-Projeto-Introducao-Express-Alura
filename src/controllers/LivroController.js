@@ -5,26 +5,12 @@ import RequisicaoIncorreta from "../errors/RequisicaoIncorreta.js";
 class LivroController{
     static async listarLivros(req, res, next){
         try{
-            const {limite = 5, pagina = 1, ordenacao = "_id:1"} = req.query;
+            const livros = livro.find();
+            
+            req.resultado = livros;
 
-            const [campoOrdenacao, ordem] = ordenacao.split(":");
+            next();
 
-            limite = parseInt(limite);
-            pagina = parseInt(pagina);
-            ordem = parseInt(ordem);
-
-            if(limite > 0 && pagina > 0){
-                let livros = await livro.find({})
-                .sort({ [campoOrdenacao]: ordem })
-                .skip((pagina - 1) * limite)
-                .populate("autor")
-                .exec(); 
-                
-                res.status(200).json(livros);
-            }
-            else{
-                next(new RequisicaoIncorreta());
-            }       
         } catch(erro){
             next(erro);
         }
@@ -92,9 +78,12 @@ class LivroController{
             }
 
             if(busca !== null){
-                const livros = await livro.find(busca).populate("autor");
-            
-                res.status(200).json(livros);
+                const livros = livro.find(busca).populate("autor");
+
+                req.resultado = livros;
+
+                next();
+
             } else{
                 res.status(200).send([]);
             }
