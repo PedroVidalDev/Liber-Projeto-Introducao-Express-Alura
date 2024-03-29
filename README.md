@@ -8,6 +8,10 @@ Projeto feito durante curso de Express e Node.js da Alura, tendo como objetivo c
 - Express
 - Mongoose
 
+# Modelos
+- Livros (titulo:string, editora:string, anoLancamento:number, autor:foreignKey)
+- Autores (nome:string, nacionalidade:string)
+
 ## Rotas
 ### Livros
 POST - `/livros` - criar um novo livro no banco.
